@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "720030936654",
+    "project_id": "becapy-2e0f1",
+    "storage_bucket": "becapy-2e0f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720030936654:android:f2290bbb80e25088f51d1f",
+        "android_client_info": {
+          "package_name": "com.haum.becapy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "720030936654-7fn67qk4ttcbju30da0pe0h08jio0bnm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.haum.becapy",
+            "certificate_hash": "9179b2c89b1cddbebf0195a68f3b041cdef3bde1"
+          }
+        },
+        {
+          "client_id": "720030936654-eqckajh28od0q4kkm96rdo44hn8qu0q5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.haum.becapy",
+            "certificate_hash": "94b21f2e7070202aa66434dc800f6ea546f30145"
+          }
+        },
+        {
+          "client_id": "720030936654-i1ffps2p5ocfrqnr1693vld954hngum3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.haum.becapy",
+            "certificate_hash": "39bcb8c4d2f7659f963233747edf97217a796350"
+          }
+        },
+        {
+          "client_id": "720030936654-sq03p32bol94vthdvt0v7thfl54j4vnb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD06w5trUCNBDTV6AIZrZsEpLKPHpLuHB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "720030936654-sq03p32bol94vthdvt0v7thfl54j4vnb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
