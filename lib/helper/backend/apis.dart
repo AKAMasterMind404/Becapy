@@ -18,6 +18,20 @@ class UserAPIS {
     return GET(endpoint);
   }
 
+  static Future<Map> getUserRatingData(String id) async {
+    // GETS USER DATA AND FILLS UserProvider
+    // if (kDebugMode) {
+    //   print("CALLING getSingleUserData(String id)");
+    // }
+    String endpoint = "users/getUserInfo/$id";
+    return GET(endpoint);
+  }
+
+  static Future<Map> getAverageAppRating() async {
+    String endpoint = "users/appRating";
+    return await GET(endpoint);
+  }
+
   static Future<Map> getRecommendations(String id) async {
     // if (kDebugMode) {
     //   print("CALLING getRecommendations(String id)");

@@ -9,6 +9,7 @@ class UserClass {
   String? profileURL;
   String? gender;
   int? age;
+  double? userRating;
   String? bio;
   List? interests;
 
@@ -30,6 +31,7 @@ class UserClass {
     required this.age,
     required this.bio,
     required this.interests,
+    this.userRating,
     this.joinedAt,
     this.cupcakes,
     this.posts,
@@ -49,6 +51,7 @@ class UserClass {
         age: userData["age"] ?? -1,
         bio: userData["bio"] ?? "This is my bio",
         interests: userData["interests"] ?? [],
+        userRating: userData["userRating"],
         joinedAt: userData["joinedAt"],
         cupcakes: userData["cupcakes"],
         posts: userData["posts"],
@@ -69,6 +72,7 @@ class UserClass {
       "gender": user.gender,
       "age": user.age,
       "bio": user.bio,
+      "userRating": user.userRating,
       "interests": user.interests,
       "posts": user.posts,
       "votes": user.votes,

@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -216,13 +218,19 @@ Future<void> initialize(BuildContext context) async {
   //   await UserSharedPreferences.setLoginStatus(uid: user.uid);
   // }
   if (user != null) {
+    final appRating = await UserAPIS.getAverageAppRating();
+    final userRatingData = unPackLocally(await UserAPIS.getUserRatingData(user.uid));
+
     Map userData = await UserAPIS.getSingleUserData(user.uid);
     Map unpackedUserData = unPackLocally(userData);
-
+    
     if (unpackedUserData["success"] == 1) {
       Map votesList = unpackedUserData["unpacked"]["votes"];
+      double? _appRating = double.parse(appRating["local_result"]["averageRating"].toString());
+      double? _userRating = double.parse(userRatingData["unpacked"]["userRating"].toString());
 
       userProvider.initializeRatingMap(votesList);
+      userProvider.setRating(_appRating, _userRating);
       userProvider.setUser(unpackedUserData["unpacked"]);
       initializeFollowingPosts(context);
     } else {

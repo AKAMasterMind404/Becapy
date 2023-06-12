@@ -38,6 +38,14 @@
           }
         },
         {
+          "client_id": "720030936654-lsdjn2e58tbhe351o2ugs0bu2gorqth1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.haum.becapy",
+            "certificate_hash": "dc02d06faa90e630b07930b0315c2fa5e6737756"
+          }
+        },
+        {
           "client_id": "720030936654-sq03p32bol94vthdvt0v7thfl54j4vnb.apps.googleusercontent.com",
           "client_type": 3
         }

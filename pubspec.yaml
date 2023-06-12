@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   dio: ^5.2.0+1
+  flutter_rating_bar: ^4.0.1
   timeago: ^3.4.0
   fluttertoast: ^8.2.2
   firebase_auth: ^4.6.2

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '/screens/HomePage.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,8 @@ class _ProfilePageState extends State<ProfilePage> {
     int userPostCount = userProvider.userPostCount;
 
     bool userLoaded = user != null;
+    double? uRating = userProvider.userRating;
+    double? aRating = userProvider.appRating;
 
     return SafeArea(
       child: Scaffold(
@@ -69,15 +72,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Container(
                                       height: 120,
                                       width: 120,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(40),
-                                        child: FadeInImage.assetNetwork(
-                                          placeholder:
-                                              "assets/images/placeholder.jpg",
-                                          image: user.profileURL!,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(40),
                                         boxShadow: const [
@@ -89,6 +83,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                             offset: Offset(0, 3),
                                           )
                                         ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(40),
+                                        child: FadeInImage.assetNetwork(
+                                          placeholder:
+                                              "assets/images/placeholder.jpg",
+                                          image: user.profileURL!,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(
@@ -163,8 +166,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         borderRadius:
                                             BorderRadius.circular(100),
                                       ),
-                                      child: Row(
-                                        children: const [
+                                      child: const Row(
+                                        children: [
                                           Text(
                                             "Edit Profile",
                                             style: TextStyle(
@@ -293,6 +296,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                 widget: const SizedBox(),
                               ),
                               ProfileButton(
+                                label: "Avg Rating ${aRating!.toStringAsPrecision(3)}",
+                                icon: Icons.star,
+                                tapHandler: () {},
+                                isOpen: false,
+                                widget: const SizedBox(),
+                              ),
+                              ProfileButton(
+                                label: uRating == null ? "Leave a Rating " : "You rated ${uRating}",
+                                icon: Icons.rate_review_outlined,
+                                tapHandler: () {
+                                  showRatingPopup(context);
+                                },
+                                isOpen: false,
+                                widget: const SizedBox(),
+                              ),
+                              ProfileButton(
                                 label: "Logout",
                                 icon: Icons.exit_to_app,
                                 isOpen: false,
@@ -338,6 +357,71 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 )),
+    );
+  }
+
+  void showRatingPopup(BuildContext context) {
+    double selectedRating = 0;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Rate'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RatingBar.builder(
+                initialRating: selectedRating,
+                minRating: 0,
+                maxRating: 5,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemSize: 40.0,
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (rating) {
+                  selectedRating = rating;
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Submit'),
+              onPressed: () async {
+                UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+                UserClass user = userProvider.getUser()!;
+
+                setState(() {
+                  isLoading = true;
+                });
+
+                Map updateBody = {
+                  "userRating": selectedRating,
+                };
+
+                final result = await UserAPIS.patchUser(user.userID!, updateBody);
+                userProvider.setRating(null, selectedRating);
+
+                setState(() {
+                  isLoading = false;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

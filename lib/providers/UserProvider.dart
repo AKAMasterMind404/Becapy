@@ -51,6 +51,9 @@ class UserProvider with ChangeNotifier {
 
   Map get userPosts => {..._userPosts};
 
+  double? userRating;
+  double? appRating;
+
   void updateUserInfo(
       {String? firstname,
       String? lastname,
@@ -202,6 +205,18 @@ class UserProvider with ChangeNotifier {
       _user = UserClass.fromJson(userMap);
     }
     isUserDataLoaded = true;
+    notifyListeners();
+  }
+
+  void setRating(double? _appRating, double? _userRating) {
+    if(_appRating != null){
+      appRating = _appRating;
+    }
+
+    if(_userRating != null ){
+      userRating = _userRating;
+    }
+
     notifyListeners();
   }
 
