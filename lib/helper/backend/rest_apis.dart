@@ -10,6 +10,7 @@ final client = Dio();
 
 Function _post = client.post;
 Function _patch = client.patch;
+Function _put = client.put;
 Function _delete = client.delete;
 Function _get = client.get;
 
@@ -27,6 +28,10 @@ Future<Map> DELETE(String url, {Map? body}) async {
 
 Future<Map> PATCH(String url, Map? body) async {
   return REQUEST(_patch, url, body: body);
+}
+
+Future<Map> PUT(String url, Map? body) async {
+  return REQUEST(_put, url, body: body);
 }
 
 Future<Map> REQUEST(Function function, String url, {Map? body}) async {

@@ -155,7 +155,7 @@ class _SelectInterestPageState extends State<SelectInterestPage> {
       "interests": interestMap.keys.toList(),
     };
 
-    final updateResult = await UserAPIS.patchUser(user.userID!, updateBody);
+    final updateResult = await UserAPIS.updateUser(user.userID!, updateBody);
     Map updateResultUnpacked = unPackLocally(updateResult);
     if (updateResultUnpacked["success"] == 1) {
       userProvider.updateUserInfo(interests: interestMap.keys.toList());

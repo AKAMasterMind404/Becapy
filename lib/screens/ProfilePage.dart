@@ -1,3 +1,4 @@
+import 'package:becapy/screens/ReviewsPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -296,14 +297,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                 widget: const SizedBox(),
                               ),
                               ProfileButton(
-                                label: "Avg Rating ${aRating!.toStringAsPrecision(3)}",
+                                label:
+                                    "Avg Rating ${aRating!.toStringAsPrecision(3)}",
                                 icon: Icons.star,
-                                tapHandler: () {},
+                                tapHandler: () {
+                                  Navigator.of(context).push(
+                                    CupertinoPageRoute(
+                                      builder: (_) =>
+                                          ReviewsPage(rating: aRating),
+                                    ),
+                                  );
+                                },
                                 isOpen: false,
                                 widget: const SizedBox(),
                               ),
                               ProfileButton(
-                                label: uRating == null ? "Leave a Rating " : "You rated ${uRating}",
+                                label: uRating == null
+                                    ? "Leave a Rating "
+                                    : "You rated $uRating",
                                 icon: Icons.rate_review_outlined,
                                 tapHandler: () {
                                   showRatingPopup(context);
@@ -362,33 +373,44 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void showRatingPopup(BuildContext context) {
     double selectedRating = 0;
+    String reviewText = '';
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Rate'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RatingBar.builder(
-                initialRating: selectedRating,
-                minRating: 0,
-                maxRating: 5,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 5,
-                itemSize: 40.0,
-                itemBuilder: (context, _) => const Icon(
-                  Icons.star,
-                  color: Colors.amber,
+          content: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    RatingBar.builder(
+                      initialRating: selectedRating,
+                      minRating: 0,
+                      maxRating: 5,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemSize: 40.0,
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        selectedRating = rating;
+                      },
+                    ),
+                    TextField(
+                      onChanged: (value) {
+                        reviewText = value;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: 'Enter your review',
+                      ),
+                    ),
+                  ],
                 ),
-                onRatingUpdate: (rating) {
-                  selectedRating = rating;
-                },
-              ),
-            ],
-          ),
           actions: [
             TextButton(
               child: const Text('Cancel'),
@@ -397,32 +419,40 @@ class _ProfilePageState extends State<ProfilePage> {
               },
             ),
             TextButton(
-              child: const Text('Submit'),
+              child: Text('Submit', style: TextStyle(color: isLoading ? Colors.grey : Colors.indigoAccent)),
               onPressed: () async {
-                UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-                UserClass user = userProvider.getUser()!;
-
-                setState(() {
-                  isLoading = true;
-                });
-
-                Map updateBody = {
-                  "userRating": selectedRating,
-                };
-
-                final result = await UserAPIS.patchUser(user.userID!, updateBody);
-                userProvider.setRating(null, selectedRating);
-
-                setState(() {
-                  isLoading = false;
-                });
-                Navigator.of(context).pop();
+                if (!isLoading) {
+                  _updateUser(selectedRating, reviewText);
+                }
               },
             ),
           ],
         );
       },
     );
+  }
+
+  void _updateUser(double selectedRating, String review) async {
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    UserClass user = userProvider.getUser()!;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    Map updateBody = {
+      "userRating": selectedRating,
+      "userReview": review,
+    };
+
+    final result = await UserAPIS.updateUser(user.userID!, updateBody);
+    userProvider.setRating(null, selectedRating);
+
+    setState(() {
+      isLoading = false;
+    });
+    Navigator.of(context).pop();
   }
 
   void _deleteUser(BuildContext context) async {

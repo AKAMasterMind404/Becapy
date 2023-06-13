@@ -9,6 +9,12 @@ class UserAPIS {
     return GET(endpoint);
   }
 
+  static Future<Map> getReviews(page) async {
+    String endpoint = "users/appReviews?page=$page&max=10";
+
+    return GET(endpoint);
+  }
+
   static Future<Map> getSingleUserData(String id) async {
     // GETS USER DATA AND FILLS UserProvider
     // if (kDebugMode) {
@@ -64,12 +70,12 @@ class UserAPIS {
     return DELETE(endpoint);
   }
 
-  static Future<Map> patchUser(String id, Map body) async {
+  static Future<Map> updateUser(String id, Map body) async {
     // if (kDebugMode) {
     //   print("CALLING patchUser(String id, Map body)");
     // }
     String endpoint = "users/updateUserInfo/$id";
-    return PATCH(endpoint, body);
+    return PUT(endpoint, body);
   }
 
   static Future<Map> getCheckUserExists(String id) async {

@@ -133,7 +133,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         };
       }
 
-      final updateResult = await UserAPIS.patchUser(id, updateBody);
+      final updateResult = await UserAPIS.updateUser(id, updateBody);
       Map updateResultUnpacked = unPackLocally(updateResult);
 
       if (updateResultUnpacked["success"] == 1) {
