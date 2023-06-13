@@ -27,13 +27,13 @@ class GetStartedPage extends StatefulWidget {
 class _GetStartedPageState extends State<GetStartedPage> {
   bool _isProcessing = false;
 
-  void _signInGoogle(BuildContext ctx) async {
+  Future<int> _signInGoogle() async {
     setState(() {
       _isProcessing = true;
     });
 
     User? user = await FireAuth.signInWithGoogle(
-      context: ctx,
+      context: context,
       label: "Error while Google sign in",
     );
     if (user != null) {
@@ -42,61 +42,15 @@ class _GetStartedPageState extends State<GetStartedPage> {
         user.uid.toString(),
       );
       if (status == 1) {
-        Navigator.of(ctx, rootNavigator: true)
-            .pushReplacementNamed(HomePage.routeName);
-        return;
+        return 1;
       } else if (status == 2) {
-        Navigator.of(ctx, rootNavigator: true)
-            .pushReplacementNamed(RegisterPage.routeName);
-        return;
+        return 2;
       } else {
-        snackBarWidget(
-          "Error while Authenticating",
-          const Color(0xFFff2954),
-          ctx,
-        );
-        return;
+        return 0;
       }
     }
-    setState(() {
-      _isProcessing = false;
-    });
-  }
 
-  void _signUpGoogle(BuildContext ctx) async {
-    setState(() {
-      _isProcessing = true;
-    });
-
-    User? user = await FireAuth.signInWithGoogle(
-      context: ctx,
-      label: "Error while Google sign up",
-    );
-    if (user != null) {
-      final status = await checkUserExists(
-        ctx,
-        user.uid.toString(),
-      );
-      if (status == 1) {
-        Navigator.of(ctx, rootNavigator: true)
-            .pushReplacementNamed(HomePage.routeName);
-        return;
-      } else if (status == 2) {
-        Navigator.of(ctx, rootNavigator: true)
-            .pushReplacementNamed(RegisterPage.routeName);
-        return;
-      } else {
-        snackBarWidget(
-          "Error while Authenticating",
-          const Color(0xFFff2954),
-          ctx,
-        );
-        return;
-      }
-    }
-    setState(() {
-      _isProcessing = false;
-    });
+    return 0;
   }
 
   @override
@@ -162,7 +116,20 @@ class _GetStartedPageState extends State<GetStartedPage> {
                                       vertical: 15,
                                     ),
                                   ),
-                                  onPressed: () => _signUpGoogle(context),
+                                  onPressed: () async {
+                                    final status = await _signInGoogle();
+                                    if (status == 1) {
+                                      Navigator.pushReplacementNamed(context!, HomePage.routeName);
+                                    } else if (status == 2) {
+                                      Navigator.pushReplacementNamed(context!, RegisterPage.routeName);
+                                    } else {
+                                      snackBarWidget(
+                                        "Error while Authenticating",
+                                        const Color(0xFFff2954),
+                                        context!,
+                                      );
+                                    }
+                                  },
                                   child: const Text(
                                     GetStartedPage._getStarted,
                                     style: TextStyle(
@@ -172,7 +139,22 @@ class _GetStartedPageState extends State<GetStartedPage> {
                                 ),
                               ),
                               GoogleSignInButton(
-                                () => _signInGoogle(context),
+                                () async {
+                                  final status = await _signInGoogle();
+                                  if (status == 1) {
+                                    Navigator.pushReplacementNamed(
+                                        context, HomePage.routeName);
+                                  } else if (status == 2) {
+                                    Navigator.pushReplacementNamed(
+                                        context, RegisterPage.routeName);
+                                  } else {
+                                    snackBarWidget(
+                                      "Error while Authenticating",
+                                      const Color(0xFFff2954),
+                                      context,
+                                    );
+                                  }
+                                },
                               ),
                             ],
                           )

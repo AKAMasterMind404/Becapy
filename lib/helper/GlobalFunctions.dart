@@ -141,11 +141,11 @@ Future<int> checkUserExists(BuildContext context, String uid) async {
     if (responseData["status"] == 404) {
       return 2;
     } else {
-      snackBarWidget(
-        "Error while authentication",
-        const Color(0xffff2954),
-        context,
-      );
+      // snackBarWidget(
+      //   "Error while authentication",
+      //   const Color(0xffff2954),
+      //   context,
+      // );
       return 0;
     }
   }

@@ -11,8 +11,8 @@ const SUCCESS_CODE = 200;
 // const endpoint = "https://enthem.herokuapp.com/";
 
 /// FOR REAL DEVICE
-const endpoint = "http://10.0.2.2:9000/";
-// const endpoint = "http://45.79.125.165:9000/";
+// const endpoint = "http://192.46.212.41:9000"; // ATHARV
+const endpoint = "http://45.79.125.165:9000/"; // COMMON
 
 const bool kDebugMode = true;
 
