@@ -444,6 +444,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Map updateBody = {
       "userRating": selectedRating,
       "userReview": review,
+      "reviewedAt": DateTime.now().toString()
     };
 
     final result = await UserAPIS.updateUser(user.userID!, updateBody);
